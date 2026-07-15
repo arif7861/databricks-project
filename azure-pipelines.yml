@@ -1,0 +1,16 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+- script: echo "CI Started"
+  displayName: 'Start'
+
+- script: echo "Checking GitHub Repository"
+  displayName: 'Check Repository'
+
+- script: echo "CI Passed Successfully"
+  displayName: 'Success'
