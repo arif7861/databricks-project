@@ -2,15 +2,112 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 steps:
 
-- script: echo "CI Started"
-  displayName: 'Start'
+#----------------------------------------------------
+# Start CI
+#----------------------------------------------------
 
-- script: echo "Checking GitHub Repository"
-  displayName: 'Check Repository'
+- script: |
+    echo "=================================="
+    echo "Databricks CI Pipeline Started"
+    echo "=================================="
+  displayName: 'Start CI'
 
-- script: echo "CI Passed Successfully"
-  displayName: 'Success'
+#----------------------------------------------------
+# Repository Validation
+#----------------------------------------------------
+
+- script: |
+    echo "Repository Contents:"
+    ls -la
+  displayName: 'List Repository Files'
+
+#----------------------------------------------------
+# Validate Metadata Notebook
+#----------------------------------------------------
+
+- script: |
+    echo "Validating 01_Metadata.py"
+
+    if [ -f "01_Metadata.py" ]; then
+      echo "01_Metadata.py Found"
+    else
+      echo "01_Metadata.py Missing"
+      exit 1
+    fi
+
+  displayName: 'Validate Metadata Notebook'
+
+#----------------------------------------------------
+# Validate Bronze Notebook
+#----------------------------------------------------
+
+- script: |
+    echo "Validating 02_Bronze.py"
+
+    if [ -f "02_Bronze.py" ]; then
+      echo "02_Bronze.py Found"
+    else
+      echo "02_Bronze.py Missing"
+      exit 1
+    fi
+
+  displayName: 'Validate Bronze Notebook'
+
+#----------------------------------------------------
+# Validate Silver Notebook
+#----------------------------------------------------
+
+- script: |
+    echo "Validating 03_Silver.py"
+
+    if [ -f "03_Silver.py" ]; then
+      echo "03_Silver.py Found"
+    else
+      echo "03_Silver.py Missing"
+      exit 1
+    fi
+
+  displayName: 'Validate Silver Notebook'
+
+#----------------------------------------------------
+# Validate Gold Notebook
+#----------------------------------------------------
+
+- script: |
+    echo "Validating 04_Gold.py"
+
+    if [ -f "04_Gold.py" ]; then
+      echo "04_Gold.py Found"
+    else
+      echo "04_Gold.py Missing"
+      exit 1
+    fi
+
+  displayName: 'Validate Gold Notebook'
+
+#----------------------------------------------------
+# Python Syntax Validation
+#----------------------------------------------------
+
+- script: |
+
+    python -m py_compile 01_Metadata.py
+    python -m py_compile 02_Bronze.py
+    python -m py_compile 03_Silver.py
+    python -m py_compile 04_Gold.py
+
+  displayName: 'Validate Python Syntax'
+
+#----------------------------------------------------
+# Success
+#----------------------------------------------------
+
+- script: |
+    echo "=================================="
+    echo "CI Passed Successfully"
+    echo "=================================="
+  displayName: 'CI Success'
